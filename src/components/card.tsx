@@ -120,7 +120,8 @@ const StakingCard: React.FC = () => {
             const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
 
             const tokenBalance: any = await tokenContract.methods.balanceOf(data.address).call();
-            const formattedBalance = web3.utils.fromWei(tokenBalance, "ether"); // Convert from Wei to Ether for readability
+            const decimals = await tokenContract.methods.decimals().call();
+            const formattedBalance = (Number(tokenBalance) / (10 ** Number(decimals))).toString();
             setBalance(formattedBalance);
             const positionCount: any = await stakingContract.methods.numPositions(data.address).call();
             setposCount(positionCount)
@@ -132,14 +133,14 @@ const StakingCard: React.FC = () => {
                     let reward = "0";
                     try {
                         const rawReward: any = await stakingContract.methods.calculateReward(data.address, pos[0]).call();
-                        reward = web3.utils.fromWei(rawReward, 'ether');
+                        reward = (Number(rawReward) / (10 ** Number(decimals))).toString();
                     } catch (error) {
                         console.error(`Error calculating reward for position ${pos[0]}:`, error);
                     }
 
                     return {
                         id: pos[0].toString(),
-                        amount: web3.utils.fromWei(pos[1].toString(), "ether"),
+                        amount: (Number(pos[1]) / (10 ** Number(decimals))).toString(),
                         startTime: pos[2].toString(),
                         endTime: pos[3].toString(),
                         numDays: pos[4].toString(),
