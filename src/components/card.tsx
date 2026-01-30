@@ -218,8 +218,11 @@ const StakingCard: React.FC = () => {
 
             const stakingContract = new web3.eth.Contract(contractABI, contractAddress);
             const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
+            // GET THE ACTUAL DECIMALS FROM THE TOKEN CONTRACT
             const decimals = await tokenContract.methods.decimals().call();
-            const stakeAmount = (Number(amount) / (10 ** Number(decimals))).toString();
+            
+            // CONVERT USING THE CORRECT DECIMALS
+            const stakeAmount = (Number(amount) * (10 ** Number(decimals))).toString();
 
             // Approve the staking contract to spend tokens
             const approvalTx = await tokenContract.methods.approve(contractAddress, stakeAmount).send({ from: account });
@@ -236,7 +239,8 @@ const StakingCard: React.FC = () => {
                 errMsg: `Tokens staked successfully!`,
             });
             setAmount(''); // Reset the input field
-            setIsMax(false)
+            setIsMax(false);
+            fetchStakingData();
         } catch (error) {
             console.error("Error during staking:", error);
             setErr({

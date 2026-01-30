@@ -230,10 +230,10 @@ const LeaderboardTable = () => {
                                             {position.numDays} Days
                                         </div>
                                         <div className="col-span-2 flex items-center">
-                                            {formatNumber(position.amount)} CRABMAN
+                                            {formatNumber(position.amount)}
                                         </div>
                                         <div className="col-span-2 flex items-center text-emerald-400">
-                                            {formatNumber(position.reward)} CRABMAN
+                                            {formatNumber(position.reward)}
                                         </div>
                                         <div className="col-span-3 flex items-center text-slate-300 text-sm">
                                             {formatDate(position.endTime)}
