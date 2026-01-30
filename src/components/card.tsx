@@ -218,8 +218,8 @@ const StakingCard: React.FC = () => {
 
             const stakingContract = new web3.eth.Contract(contractABI, contractAddress);
             const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
-
-            const stakeAmount = web3.utils.toWei(amount, "ether");
+            const decimals = await tokenContract.methods.decimals().call();
+            const stakeAmount = (Number(amount) / (10 ** Number(decimals))).toString();
 
             // Approve the staking contract to spend tokens
             const approvalTx = await tokenContract.methods.approve(contractAddress, stakeAmount).send({ from: account });
